@@ -7,7 +7,7 @@ import com.fastcampus.kotlinspring.issueservice.service.IssueService
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/issues")
+@RequestMapping("/api/v1/issues")
 class IssueController(
     private val issueService: IssueService,
 ) {
