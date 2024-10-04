@@ -41,4 +41,20 @@ class IssueService(
             ?: throw NotFoundException("이슈를 찾을 수 없습니다. id=$id")
         return IssueResponse.of(issue)
     }
+
+    @Transactional
+    fun edit(userId: Long, id: Long, request: IssueRequest): IssueResponse {
+        val issue = issueRepository.findByIdOrNull(id)
+            ?: throw NotFoundException("이슈를 찾을 수 없습니다. id=$id")
+
+        return issue.let {
+            it.userId = userId
+            it.summary = request.summary
+            it.description = request.description
+            it.type = request.type
+            it.priority = request.priority
+            it.status = request.status
+            IssueResponse.of(issueRepository.save(it))
+        }
+    }
 }
