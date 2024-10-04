@@ -5,6 +5,8 @@ import com.fastcampus.kotlinspring.issueservice.domain.IssueRepository
 import com.fastcampus.kotlinspring.issueservice.domain.enums.IssueStatus
 import com.fastcampus.kotlinspring.issueservice.dto.IssueRequest
 import com.fastcampus.kotlinspring.issueservice.dto.IssueResponse
+import com.fastcampus.kotlinspring.issueservice.exception.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -31,5 +33,12 @@ class IssueService(
         return issueRepository.findAllByStatusOrderByCreatedAtDesc(status)
             ?.map(IssueResponse::of)
             ?: emptyList()
+    }
+
+    @Transactional(readOnly = true)
+    fun get(id: Long): IssueResponse {
+        val issue = issueRepository.findByIdOrNull(id)
+            ?: throw NotFoundException("이슈를 찾을 수 없습니다. id=$id")
+        return IssueResponse.of(issue)
     }
 }
