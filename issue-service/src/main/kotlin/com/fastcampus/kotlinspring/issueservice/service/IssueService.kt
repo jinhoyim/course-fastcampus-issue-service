@@ -2,6 +2,7 @@ package com.fastcampus.kotlinspring.issueservice.service
 
 import com.fastcampus.kotlinspring.issueservice.domain.Issue
 import com.fastcampus.kotlinspring.issueservice.domain.IssueRepository
+import com.fastcampus.kotlinspring.issueservice.domain.enums.IssueStatus
 import com.fastcampus.kotlinspring.issueservice.dto.IssueRequest
 import com.fastcampus.kotlinspring.issueservice.dto.IssueResponse
 import org.springframework.stereotype.Service
@@ -23,5 +24,12 @@ class IssueService(
         )
 
         return IssueResponse.of(issueRepository.save(issue))
+    }
+
+    @Transactional(readOnly = true)
+    fun getAll(status: IssueStatus): List<IssueResponse> {
+        return issueRepository.findAllByStatusOrderByCreatedAtDesc(status)
+            ?.map(IssueResponse::of)
+            ?: emptyList()
     }
 }
