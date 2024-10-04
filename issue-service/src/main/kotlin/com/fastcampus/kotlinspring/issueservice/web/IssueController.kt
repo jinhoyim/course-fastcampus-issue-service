@@ -4,6 +4,7 @@ import com.fastcampus.kotlinspring.issueservice.config.AuthUser
 import com.fastcampus.kotlinspring.issueservice.domain.enums.IssueStatus
 import com.fastcampus.kotlinspring.issueservice.dto.IssueRequest
 import com.fastcampus.kotlinspring.issueservice.service.IssueService
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -35,4 +36,11 @@ class IssueController(
         @PathVariable id: Long,
         @RequestBody request: IssueRequest,
     ) = issueService.edit(authUser.userId, id, request)
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun delete(
+        authUser: AuthUser,
+        @PathVariable id: Long,
+    ) = issueService.delete(authUser.userId, id)
 }
