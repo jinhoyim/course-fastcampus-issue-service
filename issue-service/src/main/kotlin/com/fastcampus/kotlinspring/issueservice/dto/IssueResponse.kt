@@ -1,5 +1,6 @@
 package com.fastcampus.kotlinspring.issueservice.dto
 
+import com.fastcampus.kotlinspring.issueservice.domain.Comment
 import com.fastcampus.kotlinspring.issueservice.domain.Issue
 import com.fastcampus.kotlinspring.issueservice.domain.enums.IssuePriority
 import com.fastcampus.kotlinspring.issueservice.domain.enums.IssueStatus
@@ -9,6 +10,7 @@ import java.time.LocalDateTime
 
 class IssueResponse(
     val id: Long,
+    val comments: List<CommentResponse> = emptyList(),
     val summary: String,
     val description: String,
     val userId: Long,
@@ -25,6 +27,8 @@ class IssueResponse(
             with(issue) {
                 IssueResponse(
                     id = id!!,
+                    comments = comments.sortedByDescending(Comment::createdAt)
+                        .map(Comment::toResponse),
                     summary = summary,
                     description = description,
                     userId = userId,
