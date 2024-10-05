@@ -8,7 +8,7 @@ import com.fastcampus.kotlinspring.issueservice.domain.enums.IssueType
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.time.LocalDateTime
 
-class IssueResponse(
+data class IssueResponse(
     val id: Long,
     val comments: List<CommentResponse> = emptyList(),
     val summary: String,
