@@ -6,7 +6,7 @@ CREATE TABLE users
     email       varchar(100) NOT NULL,
     username    varchar(50) NOT NULL,
     password    varchar(500) NOT NULL,
-    profile_url varchar(500) NOT NULL,
+    profile_url varchar(500),
     created_at  timestamp default NOW(),
     updated_at  timestamp default NOW(),
     primary key (id)
