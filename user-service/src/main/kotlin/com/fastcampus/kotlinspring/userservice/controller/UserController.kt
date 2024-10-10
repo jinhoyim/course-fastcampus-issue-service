@@ -31,4 +31,11 @@ class UserController(
         @AuthToken token: String
     ) : MeResponse =
         MeResponse(userService.getByToken(token))
+
+    @GetMapping("/{userId}/username")
+    suspend fun getUserName(
+        @PathVariable userId: Long
+    ) : Map<String, String> {
+        return mapOf("reporter" to userService.get(userId).username)
+    }
 }
