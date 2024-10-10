@@ -1,8 +1,10 @@
 package com.fastcampus.kotlinspring.userservice.service
 
+import com.auth0.jwt.interfaces.DecodedJWT
 import com.fastcampus.kotlinspring.userservice.config.JWTProperties
 import com.fastcampus.kotlinspring.userservice.domain.entity.User
 import com.fastcampus.kotlinspring.userservice.domain.repository.UserRepository
+import com.fastcampus.kotlinspring.userservice.exception.InvalidJwtTokenException
 import com.fastcampus.kotlinspring.userservice.exception.PasswordNotMatchedException
 import com.fastcampus.kotlinspring.userservice.exception.UserExistsException
 import com.fastcampus.kotlinspring.userservice.exception.UserNotFoundException
@@ -67,5 +69,18 @@ class UserService(
 
     suspend fun logout(token: String) {
         cacheManager.awaitEvict(token)
+    }
+
+    suspend fun getByToken(token: String): User {
+        val cachedUser = cacheManager.awaitGetOrPut(key = token, ttl = CACHE_TTL) {
+            val decodedJWT: DecodedJWT = JWTUtils.decode(token, jwtProperties.secret, jwtProperties.issuer)
+            val userId: Long = decodedJWT.getClaim("userId").asLong() ?: throw InvalidJwtTokenException()
+            get(userId)
+        }
+        return cachedUser
+    }
+
+    suspend fun get(userId: Long): User {
+        return userRepository.findById(userId) ?: throw UserNotFoundException()
     }
 }
