@@ -1,6 +1,5 @@
 plugins {
     kotlin("jvm") version "1.9.25"
-//    kotlin("plugin.spring") version "1.9.25"
     kotlin("kapt") version "1.9.25"
     id("org.springframework.boot") version "3.3.4"
     id("org.jetbrains.kotlin.plugin.spring") version "1.9.25"
@@ -42,12 +41,6 @@ subprojects {
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
         testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     }
-
-//    dependencyManagement {
-//        imports {
-//            mavenBom(org.springframework.boot.gradle.plugin.SrpingBootPlugin.BOM_COORDINATES)
-//        }
-//    }
 
     kotlin {
         compilerOptions {
